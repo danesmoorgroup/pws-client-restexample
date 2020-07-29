@@ -6,12 +6,12 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("PwsClientRestExample")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Example code for navigating products and pricing and placing a sales order via PWS REST services.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("PWS Distributors Ltd")]
 [assembly: AssemblyProduct("PwsClientRestExample")]
-[assembly: AssemblyCopyright("Copyright ©  2020")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCopyright("Copyright © 2020")]
+[assembly: AssemblyTrademark("PWS Distributors Ltd")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible

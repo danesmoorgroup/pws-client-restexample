@@ -8,10 +8,26 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>PwsClientRestExample</RootNamespace>
     <AssemblyName>PwsClientRestExample</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,6 +49,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Pws.Clients.RestLibrary, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Pws.Clients.RestLibrary.Service.1.0.9\lib\net40\Pws.Clients.RestLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="Pws.Clients.RestLibrary.Service, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Pws.Clients.RestLibrary.Service.1.0.9\lib\net40\Pws.Clients.RestLibrary.Service.dll</HintPath>
+    </Reference>
+    <Reference Include="Pws.Clients.RestLibrary.Transport, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Pws.Clients.RestLibrary.Service.1.0.9\lib\net40\Pws.Clients.RestLibrary.Transport.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,11 +68,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\Application.cs" />
+    <Compile Include="Configuration.cs" />
+    <Compile Include="Model\Customer.cs" />
+    <Compile Include="Model\CustomerOrder.cs" />
+    <Compile Include="Model\Product.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Model\Token.cs" />
+    <Compile Include="Handler\RESTHandler.cs" />
+    <Compile Include="Handler\RESTException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
