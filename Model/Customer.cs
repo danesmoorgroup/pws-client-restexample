@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PwsClientRestExample
+namespace PwsClientRestExample.Model
 {
 	public static class Customer
 	{
@@ -18,7 +18,7 @@ namespace PwsClientRestExample
 
 		public static IPwsObjectWrapper<Customer_V1> GetCustomerAccount(IPwsObjectWrapper<Token_V1> token, String accountCode)
 		{
-			return RESTHandler<IPwsObjectWrapper<Customer_V1>>.Invoke(() => token.FollowList<Customer_V1>(f => f.SecondaryCustomers).Where(f => f.PwsObject.AccountCode == accountCode).FirstOrDefault(), "Customer");
+			return RESTHandler<IPwsObjectWrapper<Customer_V1>>.Invoke(() => token.FollowList<Customer_V1>(f => f.SecondaryCustomers, "filter=AccountCode Eq '" + accountCode + "'").FirstOrDefault(), "Customer");
 		}
 	}
 

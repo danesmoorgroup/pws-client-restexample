@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PwsClientRestExample
+namespace PwsClientRestExample.Model
 {
 	public static class CustomerOrder
 	{
@@ -120,6 +120,11 @@ namespace PwsClientRestExample
 
 		#region Address
 
+		public static IPwsObjectWrapper<Address_V1> Address(this IPwsObjectWrapper<Order_V1> order)
+		{
+			return RESTHandler<IPwsObjectWrapper<Address_V1>>.Invoke(() => order.Follow<Address_V1>(f => f.DeliveryAddress), "Address");
+		}
+
 		public static IPwsObjectWrapper<Address_V1> AssignAddress(this IPwsObjectWrapper<Order_V1> order, Address_V1 address)
 		{
 			return RESTHandler<IPwsObjectWrapper<Address_V1>>.Invoke(() => order.Put(f => f.DeliveryAddress, address), "Assign Address to Order");
@@ -136,14 +141,19 @@ namespace PwsClientRestExample
 
 		#region Dispatch Method
 
-		public static IPwsObjectWrapper<DispatchMethod_V1>[] DeliveryMethods(this IPwsObjectWrapper<Order_V1> order)
+		public static IPwsObjectWrapper<DispatchMethod_V1>[] DispatchMethods(this IPwsObjectWrapper<Order_V1> order)
 		{
 			return order.FollowList<DispatchMethod_V1>(f => f.AvailableDispatchMethods).ToArray();
 		}
 
-		public static IPwsObjectWrapper<DispatchMethod_V1> AssignDeliveryMethod(this IPwsObjectWrapper<Order_V1> order, String type, DateTime? required)
+		public static IPwsObjectWrapper<DispatchMethod_V1> DispatchMethod(this IPwsObjectWrapper<Order_V1> order)
 		{
-			var selectedDispatchMethod = order.DeliveryMethods().Where(f => f.PwsObject.Type == type).FirstOrDefault()?.PwsObject;
+			return RESTHandler<IPwsObjectWrapper<DispatchMethod_V1>>.Invoke(() => order.Follow<DispatchMethod_V1>(f => f.SelectedDispatchMethod), "Dispatch Method");
+		}
+
+		public static IPwsObjectWrapper<DispatchMethod_V1> AssignDispatchMethod(this IPwsObjectWrapper<Order_V1> order, String type, DateTime? required)
+		{
+			var selectedDispatchMethod = order.DispatchMethods().Where(f => f.PwsObject.Type == type).FirstOrDefault()?.PwsObject;
 			if (selectedDispatchMethod == null)
 			{
 				throw new Exception("No matching dispatch method available.");
@@ -171,6 +181,15 @@ namespace PwsClientRestExample
 			var chosenReleaseMethod = releaseMethods.Where(f => f.PwsObject.IsExternalPaymentMethod == false).First();
 			RESTHandler<IPwsObjectWrapper<Release_V1>>.Invoke(() => order.Post(f => f.ReleaseMethod, chosenReleaseMethod.PwsObject), "Release Order");
 			return RESTHandler<IPwsObjectWrapper<Order_V1>>.Invoke(() => order.Refresh(), "Release Order Refresh");
+		}
+
+		#endregion
+
+		#region Progress
+
+		public static IPwsObjectWrapper<Progression_V1> Progress(this IPwsObjectWrapper<Order_V1> order)
+		{
+			return RESTHandler<IPwsObjectWrapper<Progression_V1>>.Invoke(() => order.Follow<Progression_V1>(f => f.Progression), "Progress of Order");
 		}
 
 		#endregion

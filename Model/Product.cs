@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PwsClientRestExample
+namespace PwsClientRestExample.Model
 {
 	public static class Product
 	{

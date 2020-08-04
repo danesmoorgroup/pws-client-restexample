@@ -68,6 +68,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Demo\OrderCreation.cs" />
+    <Compile Include="Demo\OrderRetrievalAndProgression.cs" />
+    <Compile Include="Demo\ProductNavigation.cs" />
     <Compile Include="Model\Application.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Model\Customer.cs" />
@@ -90,5 +93,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
