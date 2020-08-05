@@ -71,6 +71,25 @@ namespace PwsClientRestExample.Demo
 				}
 			}
 
+			// Now let us take a different approach to adding dynamic products, where we've preempted the questions and their response.
+
+			// Starting with regular paint-to-order
+			var lineBespokeWithOptions1 = newOrder.AddBespokeLine("BX714", new CustomerBespokeLineOption().AddOption("CLR", "DOVE/GREY"), 2);
+			// Then middle of the road Alpina Made-to-Measure
+			var lineBespokeWithOptions2 = newOrder.AddBespokeLine("LNOBESPOKE", new CustomerBespokeLineOption().AddOption("", "BDRLDSLL").AddOption("SIZE", "Bespoke height", 900).AddOption("SIZE", "Bespoke width", 500), 1);
+			// Ending with the complicated Stanhope Made-to-Measure
+			var lineBespokeWithOptions3 = newOrder.AddBespokeLine("STABESPOKE",
+				new CustomerBespokeLineOption()
+					.AddOption("", "BDRDOOR")
+					.AddOption("SIZE", "Door height", 600)
+					.AddOption("SIZE", "Door width", 500)
+					.AddOption("RNGE", "WHITFIELD")
+					.AddOption("FNSH", "GLOSS")
+					.AddOption("CLR", "CREAM")
+					.AddOption("DRIL", "DRILL/LEFT")
+				, 1
+			);
+
 			// How do you cancel a line
 			var lineToCancel = newOrder.AddBespokeLine("0038", 80);
 			lineToCancel.Cancel();

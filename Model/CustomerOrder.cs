@@ -73,10 +73,10 @@ namespace PwsClientRestExample.Model
 
 		public static IPwsObjectWrapper<OrderLine_V2> AddBespokeLine(this IPwsObjectWrapper<Order_V1> order, String productId, decimal quantity)
 		{
-			return RESTHandler<IPwsObjectWrapper<OrderLine_V2>>.Invoke(() => order.Post(f => f.Lines, new OrderLine_V2() { ProductId = productId, OrderQuantity = quantity }), "Add Bespoke Order Line");
+			return RESTHandler<IPwsObjectWrapper<OrderLine_V2>>.Invoke(() => order.Post(f => f.Lines, new OrderLine_V2() { ProductId = productId, OrderQuantity = quantity, IgnoreBespokeOptionDefaults = true }), "Add Bespoke Order Line");
 		}
 
-		public static IPwsObjectWrapper<OrderLine_V2> AddBespokeLine(this IPwsObjectWrapper<Order_V1> order, OrderLine_V2 line, BespokeKit_V1.BespokeOption.BespokeSelection selection)
+		public static IPwsObjectWrapper<OrderLine_V2> AddBespokeLine(this IPwsObjectWrapper<Order_V1> order, OrderLine_V2 line, BespokeKit_V1.BespokeOption.BespokeSelection selection, decimal? selectionQuantity = null)
 		{
 			if (line.NextBespokeOption == null)
 			{
@@ -84,7 +84,38 @@ namespace PwsClientRestExample.Model
 			}
 
 			line.NextBespokeOption.Selection = selection;
+			if (selectionQuantity != null)
+			{
+				line.NextBespokeOption.Selection.Quantity = selectionQuantity;
+			}
+
 			return RESTHandler<IPwsObjectWrapper<OrderLine_V2>>.Invoke(() => order.Post(f => f.Lines, line), "Add Bespoke Order Line");
+		}
+
+		public static IPwsObjectWrapper<OrderLine_V2> AddBespokeLine(this IPwsObjectWrapper<Order_V1> order, String productId, CustomerBespokeLineOption options, decimal quantity)
+		{
+			var line = order.AddBespokeLine(productId, quantity);
+
+			while (line.PwsObject.NextBespokeOption != null)
+			{
+				String selectionCode = null;
+				decimal? selectionQuantity = null;
+
+				if (options.TryGetOption(line.PwsObject.NextBespokeOption.TypeCode, line.PwsObject.NextBespokeOption.Selection?.Description, out selectionCode, out selectionQuantity) == false)
+				{
+					throw new Exception("No option provided for question: " + line.PwsObject.NextBespokeOption.TypeCode + ":" + line.PwsObject.NextBespokeOption.Description + ".");
+				}
+
+				var selection = line.PwsObject.NextBespokeOption.Selection ?? line.PwsObject.NextBespokeOption.Options.Where(f => f.OptionCode == selectionCode).FirstOrDefault();
+				if (selection == null)
+				{
+					throw new Exception("Invalid option value '" + selectionCode + "' for question: " + line.PwsObject.NextBespokeOption.TypeCode + ":" + line.PwsObject.NextBespokeOption.Description + ".");
+				}
+
+				line = order.AddBespokeLine(line.PwsObject, selection, selectionQuantity);
+			}
+
+			return line;
 		}
 
 		private static Link_V1 GetDrillingKit(IPwsObjectWrapper<OrderLine_V2> line)
@@ -192,6 +223,50 @@ namespace PwsClientRestExample.Model
 			return RESTHandler<IPwsObjectWrapper<Progression_V1>>.Invoke(() => order.Follow<Progression_V1>(f => f.Progression), "Progress of Order");
 		}
 
+		#endregion
+	}
+
+	public class CustomerBespokeLineOption: Dictionary<String, object> { }
+
+	public static class CustomerBespokeLineOptionExtensions
+	{
+		#region CustomerBespokeLineOptionExtensions Members
+		public static CustomerBespokeLineOption AddOption(this CustomerBespokeLineOption option, String type, String selection)
+		{
+			option[type] = selection;
+			return option;
+		}
+
+		public static CustomerBespokeLineOption AddOption(this CustomerBespokeLineOption option, String type, String question, decimal quantity)
+		{
+			option[type + ":" + question] = quantity;
+			return option;
+		}
+
+		public static bool TryGetOption(this CustomerBespokeLineOption option, String type, String question, out String selection, out decimal? quantity)
+		{
+			var key = type + (String.IsNullOrWhiteSpace(question) == false ? (":" + question) : String.Empty);
+			if (option.ContainsKey(key) == false)
+			{
+				selection = null;
+				quantity = null;
+				return false;
+			}
+			
+			var result = option[key];
+			if (result is decimal)
+			{
+				quantity = result as decimal?;
+				selection = null;
+			}
+			else
+			{
+				selection = result as String;
+				quantity = null;
+			}
+
+			return true;
+		}
 		#endregion
 	}
 }
