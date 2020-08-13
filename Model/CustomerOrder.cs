@@ -1,5 +1,6 @@
 ﻿using Pws.Clients.RestLibrary;
 using Pws.Clients.RestLibrary.Customers;
+using Pws.Clients.RestLibrary.Customers.Contacts;
 using Pws.Clients.RestLibrary.Customers.Orders;
 using Pws.Clients.RestLibrary.Service;
 using System;
@@ -44,6 +45,25 @@ namespace PwsClientRestExample.Model
 		{
 			return RESTHandler<IPwsObjectWrapper<Order_V1>>.Invoke(() => order.PutSelf(), "Update Order");
 		}
+
+		#region Buyer Contact
+
+		public static IPwsObjectWrapper<Contact_V1> BuyerContact(this IPwsObjectWrapper<Order_V1> order)
+		{
+			return RESTHandler<IPwsObjectWrapper<Contact_V1>>.Invoke(() => order.Follow<Contact_V1>(f => f.BuyerContact), "Buyer Contact");
+		}
+
+		public static IPwsObjectWrapper<Contact_V1> AssignBuyerContact(this IPwsObjectWrapper<Order_V1> order, Contact_V1 contact)
+		{
+			return RESTHandler<IPwsObjectWrapper<Contact_V1>>.Invoke(() => order.Put(f => f.BuyerContact, contact), "Assign Buyer Contact to Order");
+		}
+
+		public static IPwsObjectWrapper<Contact_V1> AssignBuyerContact(this IPwsObjectWrapper<Order_V1> order, String firstname, String surname)
+		{
+			return RESTHandler<IPwsObjectWrapper<Contact_V1>>.Invoke(() => order.Put(f => f.BuyerContact, new Contact_V1() { FirstName = firstname, Surname = surname }), "Assign Buyer Contact Name to Order");
+		}
+
+		#endregion
 
 		#region Standard Line
 

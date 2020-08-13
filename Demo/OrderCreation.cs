@@ -22,6 +22,15 @@ namespace PwsClientRestExample.Demo
 			// newOrder.PwsObject.OrderReference = "<unique reference>";
 			// newOrder.Update();
 
+			// Who is the current buyer (should be whoever is linked to the login)
+			var buyer = newOrder.BuyerContact();
+
+			// Assign first buyer from the customer's contacts' list.
+			newOrder.AssignBuyerContact(customer.Contacts().First().PwsObject);
+
+			//// Alternatively we could assign a specific contact name to the order, and let the order system resolve this
+			//newOrder.AssignBuyerContact("Douglas", "Adams");
+
 			// Add regular door and retrieve its pricing
 			var lineDoor = newOrder.AddLine("BLG716", 1);
 			var linePrice = lineDoor.PwsObject.Price;
