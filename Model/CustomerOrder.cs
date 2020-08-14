@@ -194,12 +194,34 @@ namespace PwsClientRestExample.Model
 
 		public static IPwsObjectWrapper<DispatchMethod_V1>[] DispatchMethods(this IPwsObjectWrapper<Order_V1> order)
 		{
-			return order.FollowList<DispatchMethod_V1>(f => f.AvailableDispatchMethods).ToArray();
+			return RESTHandler<IPwsObjectWrapper<DispatchMethod_V1>[]>.Invoke(() => order.FollowList<DispatchMethod_V1>(f => f.AvailableDispatchMethods).ToArray(), "Dispatch Methods");
 		}
 
 		public static IPwsObjectWrapper<DispatchMethod_V1> DispatchMethod(this IPwsObjectWrapper<Order_V1> order)
 		{
 			return RESTHandler<IPwsObjectWrapper<DispatchMethod_V1>>.Invoke(() => order.Follow<DispatchMethod_V1>(f => f.SelectedDispatchMethod), "Dispatch Method");
+		}
+
+		public static IPwsObjectWrapper<DispatchMethodBlackoutDateRange_V1>[] Blackouts(this IPwsObjectWrapper<DispatchMethod_V1> method, DateTime? start = null, DateTime? end = null)
+		{
+			var query = new RESTQueryBuilder();
+			if (start != null)
+				query.AddDate("BlackoutDate", RESTQueryBuilder.Operator.Ge, start.Value);
+			if (end != null)
+				query.AddDate("BlackoutDate", RESTQueryBuilder.Operator.Le, end.Value);
+
+			return RESTHandler<IPwsObjectWrapper<DispatchMethodBlackoutDateRange_V1>[]>.Invoke(() => method.FollowList<DispatchMethodBlackoutDateRange_V1>(f => f.BlackoutDates, query.QueryString).ToArray(), "Dispatch Method Blackouts");
+		}
+
+		public static IPwsObjectWrapper<DispatchMethodSuggestedDate_V1>[] Suggestions(this IPwsObjectWrapper<DispatchMethod_V1> method, DateTime? start = null, DateTime? end = null)
+		{
+			var query = new RESTQueryBuilder();
+			if (start != null)
+				query.AddDate("SuggestedDate", RESTQueryBuilder.Operator.Ge, start.Value);
+			if (end != null)
+				query.AddDate("SuggestedDate", RESTQueryBuilder.Operator.Le, end.Value);
+
+			return RESTHandler<IPwsObjectWrapper<DispatchMethodSuggestedDate_V1>[]>.Invoke(() => method.FollowList<DispatchMethodSuggestedDate_V1>(f => f.SuggestedDates, query.QueryString).ToArray(), "Dispatch Method Suggestions");
 		}
 
 		public static IPwsObjectWrapper<DispatchMethod_V1> AssignDispatchMethod(this IPwsObjectWrapper<Order_V1> order, String type, DateTime? required)

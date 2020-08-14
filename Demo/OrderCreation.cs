@@ -122,8 +122,28 @@ namespace PwsClientRestExample.Demo
 			// Retrieve what delivery methods are available for this customer.
 			var deliveryMethods = resumedOrder.DispatchMethods();
 
-			// Set week commencing date
-			resumedOrder.AssignDispatchMethod("WEEKBEGN", new DateTime(2020, 9, 21));
+			// Now let's see if we can change this to a week commencing.
+			var weekMethod = deliveryMethods.Where(f => f.PwsObject.Description.Contains("week commencing")).FirstOrDefault();
+			if (weekMethod != null)
+			{
+				// Find earliest available week, commencing on Monday at 10am, where there are now blackouts.
+				var selectedDate = DateTime.Today.AddHours(10);
+				while (selectedDate.DayOfWeek != DayOfWeek.Monday) selectedDate = selectedDate.AddDays(-1);
+				do { selectedDate = selectedDate.AddDays(7); } while (weekMethod.Blackouts(selectedDate, selectedDate).Any());
+				
+				// Set week commencing date
+				resumedOrder.AssignDispatchMethod(weekMethod.PwsObject.Type, selectedDate.Date);
+			}
+
+			// Now let's see if we can change this to a collect
+			var collectMethod = deliveryMethods.Where(f => f.PwsObject.Description.StartsWith("Collect")).FirstOrDefault();
+			if (collectMethod != null)
+			{
+				// Now lets take the first suggestion, which could be an exising booking or next available slot.
+				var suggestions = collectMethod.Suggestions(DateTime.Today, DateTime.Today.AddMonths(2));
+				if (suggestions.Any())
+					resumedOrder.AssignDispatchMethod(collectMethod.PwsObject.Type, suggestions.First().PwsObject.Date);
+			}
 
 			// Release resumed order
 			resumedOrder.Release();
