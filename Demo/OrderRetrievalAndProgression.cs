@@ -33,6 +33,7 @@ namespace PwsClientRestExample.Demo
 				// Get delivery details
 				var deliveryAddress = order.Address();
 				var deliveryMethod = order.DispatchMethod();
+				var expectedDate = deliveryMethod.PwsObject.ExpectedDate;
 
 				// Get order totals
 				var goodsTotal = order.PwsObject.GoodsTotal;

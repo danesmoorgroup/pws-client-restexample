@@ -1,4 +1,7 @@
-﻿using Pws.Clients.RestLibrary.Customers;
+﻿using Pws.Clients.RestLibrary;
+using Pws.Clients.RestLibrary.Customers;
+using Pws.Clients.RestLibrary.Customers.Orders;
+using Pws.Clients.RestLibrary.Customers.Products;
 using Pws.Clients.RestLibrary.Products;
 using Pws.Clients.RestLibrary.Products.Navigation;
 using Pws.Clients.RestLibrary.Service;
@@ -71,12 +74,46 @@ namespace PwsClientRestExample.Model
 			);
 		}
 
-		public static IPwsObjectWrapper<Category_V1>[] Categories(this IPwsObjectWrapper<ProductInformation_V1> product)
+		public static IPwsObjectWrapper<Category_V1>[] Categories(this IPwsObjectWrapper<ProductInformation_V1> info)
 		{
 			return RESTHandler<IPwsObjectWrapper<Category_V1>[]>.Invoke(
-				() => product.FollowList<Category_V1>(f => f.Categories).ToArray(),
+				() => info.FollowList<Category_V1>(f => f.Categories).ToArray(),
 				"Category List"
 			);
+		}
+
+		public static IPwsObjectWrapper<Product_V2> BespokeKit(this IPwsObjectWrapper<ProductInformation_V1> info)
+		{
+			var link = info.PwsObject.CustomerBespokeKits.Where(f => f.Href.AbsolutePath.ToLower().EndsWith("bespokekit")).FirstOrDefault();
+			if (link == null)
+				return null;
+
+			return RESTHandler<IPwsObjectWrapper<Product_V2>>.Invoke(() => info.Post(f => link, new Product_V2() { }), "Bespoke Kit");
+		}
+
+		public static IPwsObjectWrapper<Product_V2> BespokeDrillingKit(this IPwsObjectWrapper<ProductInformation_V1> info)
+		{
+			var link = info.PwsObject.CustomerBespokeKits.Where(f => f.Href.AbsolutePath.ToLower().Contains("drilling")).FirstOrDefault();
+			if (link == null)
+				return null;
+
+			return RESTHandler<IPwsObjectWrapper<Product_V2>>.Invoke(() => info.Post(f => link, new Product_V2() { }), "Bespoke Drilling");
+		}
+
+		public static IPwsObjectWrapper<Product_V2> BespokePricing(this IPwsObjectWrapper<ProductInformation_V1> info, Product_V2 product, BespokeKit_V1.BespokeOption.BespokeSelection selection, decimal? selectionQuantity = null)
+		{
+			if (product.NextBespokeOption == null)
+			{
+				throw new Exception("All bespoke options assigned.");
+			}
+
+			product.NextBespokeOption.Selection = selection;
+			if (selectionQuantity != null)
+			{
+				product.NextBespokeOption.Selection.Quantity = selectionQuantity;
+			}
+
+			return RESTHandler<IPwsObjectWrapper<Product_V2>>.Invoke(() => info.Post(f => product.FindSelfLink(), product), "Bespoke Pricing");
 		}
 
 		public static IPwsObjectWrapper<ProductInformation_CustomerProduct_V1V1>[] ProductsWithPrices(this IPwsObjectWrapper<NavigationChoice_V1> choice)
@@ -87,12 +124,46 @@ namespace PwsClientRestExample.Model
 			);
 		}
 
-		public static IPwsObjectWrapper<Category_V1>[] Categories(this IPwsObjectWrapper<ProductInformation_CustomerProduct_V1V1> product)
+		public static IPwsObjectWrapper<Category_V1>[] Categories(this IPwsObjectWrapper<ProductInformation_CustomerProduct_V1V1> info)
 		{
 			return RESTHandler<IPwsObjectWrapper<Category_V1>[]>.Invoke(
-				() => product.FollowList<Category_V1>(f => f.Categories).ToArray(),
+				() => info.FollowList<Category_V1>(f => f.Categories).ToArray(),
 				"Category List"
 			);
+		}
+
+		public static IPwsObjectWrapper<Product_V2> BespokeKit(this IPwsObjectWrapper<ProductInformation_CustomerProduct_V1V1> info)
+		{
+			var link = info.PwsObject.CustomerBespokeKits.Where(f => f.Href.AbsolutePath.ToLower().EndsWith("bespokekit")).FirstOrDefault();
+			if (link == null)
+				return null;
+
+			return RESTHandler<IPwsObjectWrapper<Product_V2>>.Invoke(() => info.Post(f => link, new Product_V2() { }), "Bespoke Kit");
+		}
+
+		public static IPwsObjectWrapper<Product_V2> BespokeDrillingKit(this IPwsObjectWrapper<ProductInformation_CustomerProduct_V1V1> info)
+		{
+			var link = info.PwsObject.CustomerBespokeKits.Where(f => f.Href.AbsolutePath.ToLower().Contains("drilling")).FirstOrDefault();
+			if (link == null)
+				return null;
+
+			return RESTHandler<IPwsObjectWrapper<Product_V2>>.Invoke(() => info.Post(f => link, new Product_V2() { }), "Bespoke Drilling");
+		}
+
+		public static IPwsObjectWrapper<Product_V2> BespokePricing(this IPwsObjectWrapper<ProductInformation_CustomerProduct_V1V1> info, Product_V2 product, BespokeKit_V1.BespokeOption.BespokeSelection selection, decimal? selectionQuantity = null)
+		{
+			if (product.NextBespokeOption == null)
+			{
+				throw new Exception("All bespoke options assigned.");
+			}
+
+			product.NextBespokeOption.Selection = selection;
+			if (selectionQuantity != null)
+			{
+				product.NextBespokeOption.Selection.Quantity = selectionQuantity;
+			}
+
+			return RESTHandler<IPwsObjectWrapper<Product_V2>>.Invoke(() => info.Post(f => product.FindSelfLink(), product), "Bespoke Pricing");
 		}
 
 		#endregion

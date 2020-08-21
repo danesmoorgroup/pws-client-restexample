@@ -13,7 +13,7 @@ namespace PwsClientRestExample.Demo
 	{
 		public static void Run(IPwsObjectWrapper<Customer_V1> customer)
 		{
-			Console.WriteLine("Demonstrate Product Naviagtion.");
+			Console.WriteLine("Demonstrate Product Navigation.");
 
 			// Producst are filtered using Navigation.
 			var root = Product.GetChoices(customer);
@@ -47,6 +47,20 @@ namespace PwsClientRestExample.Demo
 			var gross = product.Price.GrossPrice;
 			var discount = product.Price.DiscountPercentage;
 			var net = product.Price.NetPrice;
+
+			// Now lets make an enquiry against a Porter dynamic kit and retrieve a price
+			var porterDynamic = kitchen.Navigate("Section", "Doors").Navigate("Range Family", "Porter");
+			var firstPorterBespokeItem = porterDynamic.ProductsWithPrices().Where(f => f.PwsObject.IsBespoke).FirstOrDefault();
+			if (firstPorterBespokeItem != null)
+			{
+				var porterBespokeItem = firstPorterBespokeItem.BespokeKit();
+				while (porterBespokeItem.PwsObject.NextBespokeOption != null)
+				{
+					porterBespokeItem = firstPorterBespokeItem.BespokePricing(porterBespokeItem.PwsObject, porterBespokeItem.PwsObject.NextBespokeOption.Options.Last(), porterBespokeItem.PwsObject.NextBespokeOption.Selection?.MinQuantity);
+				}
+
+				var price = porterBespokeItem.PwsObject.Price;
+			}
 
 			Console.WriteLine("Completed.");
 		}
