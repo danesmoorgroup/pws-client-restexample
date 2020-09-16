@@ -31,6 +31,14 @@ namespace PwsClientRestExample.Demo
 			//// Alternatively we could assign a specific contact name to the order, and let the order system resolve this
 			//newOrder.AssignBuyerContact("Douglas", "Adams");
 
+			//// Alternatively we could create a new contact object and assign it to the order
+			//try
+			//{
+			//	newOrder.AssignBuyerContact(CustomerContact.Create(customer, "Mr", "Douglas", "Adams", "Writer", "douglas.adams@pws.co.uk").PwsObject);
+			//}
+			//catch (RESTException re) { Console.WriteLine(re.Message); }
+			//catch (Exception e) { Console.WriteLine(e.Message); }
+
 			// Add regular door and retrieve its pricing
 			var lineDoor = newOrder.AddLine("BLG716", 1);
 			var linePrice = lineDoor.PwsObject.Price;

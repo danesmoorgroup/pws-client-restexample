@@ -50,13 +50,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Pws.Clients.RestLibrary, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Pws.Clients.RestLibrary.Service.1.0.11\lib\net40\Pws.Clients.RestLibrary.dll</HintPath>
+      <HintPath>packages\Pws.Clients.RestLibrary.Service.1.0.12\lib\net40\Pws.Clients.RestLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Pws.Clients.RestLibrary.Service, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Pws.Clients.RestLibrary.Service.1.0.11\lib\net40\Pws.Clients.RestLibrary.Service.dll</HintPath>
+      <HintPath>packages\Pws.Clients.RestLibrary.Service.1.0.12\lib\net40\Pws.Clients.RestLibrary.Service.dll</HintPath>
     </Reference>
     <Reference Include="Pws.Clients.RestLibrary.Transport, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Pws.Clients.RestLibrary.Service.1.0.11\lib\net40\Pws.Clients.RestLibrary.Transport.dll</HintPath>
+      <HintPath>packages\Pws.Clients.RestLibrary.Service.1.0.12\lib\net40\Pws.Clients.RestLibrary.Transport.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -75,6 +75,7 @@
     <Compile Include="Model\Application.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Model\Customer.cs" />
+    <Compile Include="Model\CustomerContact.cs" />
     <Compile Include="Model\CustomerOrder.cs" />
     <Compile Include="Model\Product.cs" />
     <Compile Include="Program.cs" />
