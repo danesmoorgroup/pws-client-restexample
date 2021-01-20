@@ -17,4 +17,12 @@ namespace PwsClientRestExample.Model
 			return RESTHandler<IPwsObjectWrapper<Contact_V1>>.Invoke(() => customer.Post(f => f.Contacts, new Contact_V1() { Title = title, FirstName = firstname, Surname = surname, JobTitle = jobTitle, Email = new Uri("mailto://" + emailAddress) }), "Create Customer Contact");
 		}
 	}
+
+	public static class CustomerContactExtensions
+	{
+		public static IPwsObjectWrapper<Contact_V1> Update(this IPwsObjectWrapper<Contact_V1> contact)
+		{
+			return RESTHandler<IPwsObjectWrapper<Contact_V1>>.Invoke(() => contact.PutSelf(), "Update Customer Contact");
+		}
+	}
 }

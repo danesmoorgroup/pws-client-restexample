@@ -49,14 +49,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Pws.Clients.RestLibrary, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Pws.Clients.RestLibrary.Service.1.0.12\lib\net40\Pws.Clients.RestLibrary.dll</HintPath>
+    <Reference Include="Pws.Clients.RestLibrary, Version=1.0.13.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Pws.Clients.RestLibrary.Service.1.0.13\lib\net40\Pws.Clients.RestLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="Pws.Clients.RestLibrary.Service, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Pws.Clients.RestLibrary.Service.1.0.12\lib\net40\Pws.Clients.RestLibrary.Service.dll</HintPath>
+    <Reference Include="Pws.Clients.RestLibrary.Service, Version=1.0.13.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Pws.Clients.RestLibrary.Service.1.0.13\lib\net40\Pws.Clients.RestLibrary.Service.dll</HintPath>
     </Reference>
-    <Reference Include="Pws.Clients.RestLibrary.Transport, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Pws.Clients.RestLibrary.Service.1.0.12\lib\net40\Pws.Clients.RestLibrary.Transport.dll</HintPath>
+    <Reference Include="Pws.Clients.RestLibrary.Transport, Version=1.0.13.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Pws.Clients.RestLibrary.Service.1.0.13\lib\net40\Pws.Clients.RestLibrary.Transport.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
