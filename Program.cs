@@ -9,7 +9,7 @@ namespace PwsClientRestExample
 {
 	/*
 	 * Example of PWS Client Restful service
-	 * Copyright (C) PWS Distributors Ltd 2020
+	 * Copyright (C) PWS Distributors Ltd 2021
 	 * All rights reserved.
 	 * 
 	 * Requires download of NuGet package Pws.Clients.RestLibrary.Service from

@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("PWS Distributors Ltd")]
 [assembly: AssemblyProduct("PwsClientRestExample")]
-[assembly: AssemblyCopyright("Copyright © 2020")]
+[assembly: AssemblyCopyright("Copyright © 2021")]
 [assembly: AssemblyTrademark("PWS Distributors Ltd")]
 [assembly: AssemblyCulture("")]
 
