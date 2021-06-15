@@ -38,11 +38,14 @@ namespace PwsClientRestExample
 				// Demonstrate Product Navigation, pricing and categories
 				Demo.ProductNavigation.Run(customer);
 
-                // Demonstrate Creation
-                //Demo.OrderCreation.Run(customer);
+				// Demonstrate Creation
+				//Demo.OrderCreation.Run(customer);
 
 				// Demonstrate Order Retrieval/ Progression
 				//Demo.OrderRetrievalAndProgression.Run(customer);
+
+				// Demonstrate Product Navigation, pricing and categories
+				// Demo.OrderBatching.Run(customer);
 			}
             catch (RESTException re) { Console.WriteLine(re.Message); }
             catch (Exception e) { Console.WriteLine(e.Message); }

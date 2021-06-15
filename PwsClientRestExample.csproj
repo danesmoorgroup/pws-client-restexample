@@ -49,14 +49,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Pws.Clients.RestLibrary, Version=1.0.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Pws.Clients.RestLibrary.Service.1.0.14\lib\net40\Pws.Clients.RestLibrary.dll</HintPath>
+    <Reference Include="Pws.Clients.RestLibrary, Version=1.0.18.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Pws.Clients.RestLibrary.Service.1.0.18\lib\net40\Pws.Clients.RestLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="Pws.Clients.RestLibrary.Service, Version=1.0.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Pws.Clients.RestLibrary.Service.1.0.14\lib\net40\Pws.Clients.RestLibrary.Service.dll</HintPath>
+    <Reference Include="Pws.Clients.RestLibrary.Service, Version=1.0.18.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Pws.Clients.RestLibrary.Service.1.0.18\lib\net40\Pws.Clients.RestLibrary.Service.dll</HintPath>
     </Reference>
-    <Reference Include="Pws.Clients.RestLibrary.Transport, Version=1.0.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Pws.Clients.RestLibrary.Service.1.0.14\lib\net40\Pws.Clients.RestLibrary.Transport.dll</HintPath>
+    <Reference Include="Pws.Clients.RestLibrary.Transport, Version=1.0.18.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Pws.Clients.RestLibrary.Service.1.0.18\lib\net40\Pws.Clients.RestLibrary.Transport.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -68,6 +68,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Demo\OrderBatching.cs" />
     <Compile Include="Demo\OrderCreation.cs" />
     <Compile Include="Demo\OrderRetrievalAndProgression.cs" />
     <Compile Include="Demo\ProductNavigation.cs" />
@@ -86,7 +87,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">

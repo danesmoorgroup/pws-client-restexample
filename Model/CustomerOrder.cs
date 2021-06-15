@@ -18,6 +18,11 @@ namespace PwsClientRestExample.Model
 			return RESTHandler<IPwsObjectWrapper<Order_V1>[]>.Invoke(() => customer.FollowList<Order_V1>(f => f.OutstandingOrders).ToArray(), "Outstanding Orders");
 		}
 
+		public static IPwsObjectWrapper<Order_V1>[] GetOutstandingJobs(IPwsObjectWrapper<Customer_V1> customer)
+		{
+			return RESTHandler<IPwsObjectWrapper<Order_V1>[]>.Invoke(() => customer.FollowList<Order_V1>(f => f.OutstandingOrders, "filter=IsBatchMaster Eq True").ToArray(), "Outstanding Jobs");
+		}
+
 		public static IPwsObjectWrapper<Order_V1> Retrieve(IPwsObjectWrapper<Customer_V1> customer, String orderId)
 		{
 			return RESTHandler<IPwsObjectWrapper<Order_V1>>.Invoke(() => customer.FollowList<Order_V1>(f => f.AllOrders, "filter=OrderId Eq '" + orderId + "'").FirstOrDefault(), "Retrieve Order");
@@ -254,6 +259,27 @@ namespace PwsClientRestExample.Model
 			var chosenReleaseMethod = releaseMethods.Where(f => f.PwsObject.IsExternalPaymentMethod == false).First();
 			RESTHandler<IPwsObjectWrapper<Release_V1>>.Invoke(() => order.Post(f => f.ReleaseMethod, chosenReleaseMethod.PwsObject), "Release Order");
 			return RESTHandler<IPwsObjectWrapper<Order_V1>>.Invoke(() => order.Refresh(), "Release Order Refresh");
+		}
+
+		#endregion
+
+		#region Batch
+
+		public static IPwsObjectWrapper<Batch_V1> Batch(this IPwsObjectWrapper<Order_V1> order)
+		{
+			return RESTHandler<IPwsObjectWrapper<Batch_V1>>.Invoke(() => order.Follow<Batch_V1>(f => f.Batch), "Batch");
+		}
+
+		public static IPwsObjectWrapper<Batch_V1> AddToBatch(this IPwsObjectWrapper<Batch_V1> batch, String orderId)
+		{
+			RESTHandler<IPwsObjectWrapper<BatchOrder_V1>>.Invoke(() => batch.Post(f => f.Lines, new BatchOrder_V1() { OrderId = orderId } ), "Add Batch Order");
+			return RESTHandler<IPwsObjectWrapper<Batch_V1>>.Invoke(() => batch.Refresh(), "Refresh Batch");
+		}
+
+		public static IPwsObjectWrapper<Batch_V1> RemoveFromBatch(this IPwsObjectWrapper<Batch_V1> batch, String orderId)
+		{
+			RESTHandler<object>.Invoke(() => { batch.FollowList<BatchOrder_V1>(f => f.Lines)?.Where(f => f.PwsObject.OrderId == orderId).First().DeleteSelf(); return null; }, "Remove Batch Order");
+			return RESTHandler<IPwsObjectWrapper<Batch_V1>>.Invoke(() => batch.Refresh(), "Refresh Batch");
 		}
 
 		#endregion
