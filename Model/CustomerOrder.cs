@@ -32,6 +32,11 @@ namespace PwsClientRestExample.Model
 		{
 			return RESTHandler<IPwsObjectWrapper<Order_V1>>.Invoke(() => customer.Post(f => f.OutstandingOrders, new Order_V1() { OrderReference = uniqueReference }), "Create Order");
 		}
+
+		public static IPwsObjectWrapper<Order_V1> RetrieveOnReference(IPwsObjectWrapper<Customer_V1> customer, String reference)
+		{
+			return RESTHandler<IPwsObjectWrapper<Order_V1>>.Invoke(() => customer.FollowList<Order_V1>(f => f.AllOrders, "filter=OrderReference Eq '" + reference + "'").FirstOrDefault(), "Retrieve Order");
+		}
 	}
 
 	public static class CustomerOrderExtensions
@@ -71,6 +76,11 @@ namespace PwsClientRestExample.Model
 		#endregion
 
 		#region Standard Line
+
+		public static IPwsObjectWrapper<OrderLine_V1>[] GetLines(this IPwsObjectWrapper<Order_V1> order)
+		{
+			return RESTHandler<IPwsObjectWrapper<OrderLine_V1>[]>.Invoke(() => order.FollowList<OrderLine_V1>(f => f.Lines).ToArray(), "Get Order Lines");
+		}
 
 		public static IPwsObjectWrapper<OrderLine_V1> AddLine(this IPwsObjectWrapper<Order_V1> order, String productId, decimal quantity)
 		{

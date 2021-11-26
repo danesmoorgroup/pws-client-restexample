@@ -13,7 +13,7 @@ namespace PwsClientRestExample.Demo
 	{
 		public static void Run(IPwsObjectWrapper<Customer_V1> customer)
 		{
-			Console.WriteLine("Demonstrate Order Retrieval/ Progressn.");
+			Console.WriteLine("Demonstrate Order Retrieval/ Progress.");
 
 			// Retrieve a list of outstanding orders.
 			var orders = CustomerOrder.GetOutstanding(customer).Where(f => f.PwsObject.IsUpdateableByCustomer == false).ToArray();

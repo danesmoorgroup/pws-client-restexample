@@ -44,7 +44,7 @@ namespace PwsClientRestExample
 				// Demonstrate Order Retrieval/ Progression
 				//Demo.OrderRetrievalAndProgression.Run(customer);
 
-				// Demonstrate Product Navigation, pricing and categories
+				// Demonstrate Batching of Orders into jobs
 				// Demo.OrderBatching.Run(customer);
 			}
             catch (RESTException re) { Console.WriteLine(re.Message); }

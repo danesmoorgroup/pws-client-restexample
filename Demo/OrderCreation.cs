@@ -156,12 +156,18 @@ namespace PwsClientRestExample.Demo
 			// Release resumed order
 			resumedOrder.Release();
 
-			// Now retrieve the released order based on the unqiue PWS OrderId
+			// Now retrieve the released order based on the unique PWS OrderId
 			var checkOrder = CustomerOrder.Retrieve(customer, resumedOrder.PwsObject.OrderId);
 
 			// Retrieve progress review of order.  This is split by fullfillment, each containing a list of tasks to complete.
 			// Some of these tasks will include links to documents that can be downloaded.
 			var progressOfOrder = checkOrder.Progress();
+
+			// Now retrieve the released order based on the customer's order reference
+			var checkOrderOnReference = CustomerOrder.Retrieve(customer, resumedOrder.PwsObject.OrderReference);
+
+			// Retrieve order lines
+			var checkOrderLines = checkOrderOnReference.GetLines();
 
 			Console.WriteLine("Completed.");
 		}
