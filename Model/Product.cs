@@ -17,10 +17,13 @@ namespace PwsClientRestExample.Model
 	{
 		public static IPwsObjectWrapper<NavigationChoice_V1> GetChoices(IPwsObjectWrapper<Customer_V1> customer)
 		{
-			return RESTHandler<IPwsObjectWrapper<NavigationChoice_V1>>.Invoke(
-				() => customer.Follow<NavigationChoice_V1>(f => f.ProductNavigation),
-				"Product Navigation"
+			return RESTHandler<IPwsObjectWrapper<NavigationChoice_V1>>.Invoke(() => customer.Follow<NavigationChoice_V1>(f => f.ProductNavigation), "Product Navigation"
 			);
+		}
+
+		public static IPwsObjectWrapper<Product_V1> GetProductWithPrice(IPwsObjectWrapper<Customer_V1> customer, String productCode)
+		{
+			return RESTHandler<IPwsObjectWrapper<Product_V1>>.Invoke(() => customer.FollowList<Product_V1>(f => f.Products, "filter=ProductId Eq '" + productCode + "'").FirstOrDefault(), "Product");
 		}
 	}
 

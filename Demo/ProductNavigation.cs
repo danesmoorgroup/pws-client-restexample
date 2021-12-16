@@ -15,7 +15,7 @@ namespace PwsClientRestExample.Demo
 		{
 			Console.WriteLine("Demonstrate Product Navigation.");
 
-			// Producst are filtered using Navigation.
+			// Products are filtered using Navigation.
 			var root = Product.GetChoices(customer);
 
 			// We can retrieve a list of filter choices
@@ -61,6 +61,11 @@ namespace PwsClientRestExample.Demo
 
 				var price = porterBespokeItem.PwsObject.Price;
 			}
+
+			// Alternatively you can retrieve a product
+			var product3203 = Product.GetProductWithPrice(customer, "3203");
+			var pricing = product3203.PwsObject.Price;
+			var multiple = pricing.OrderMultiple;
 
 			Console.WriteLine("Completed.");
 		}
