@@ -21,6 +21,14 @@ namespace PwsClientRestExample.Model
 			);
 		}
 
+		public static IPwsObjectWrapper<ProductInformation_V1> GetProductInfo(IPwsObjectWrapper<Customer_V1> customer, String productCode)
+		{
+			return RESTHandler<IPwsObjectWrapper<ProductInformation_V1>>.Invoke(
+				() => GetChoices(customer).FollowList<ProductInformation_V1>(f => f.ProductList, "filter=ProductId Eq '" + productCode + "'").FirstOrDefault(),
+				"ProductInfo"
+			);
+		}
+
 		public static IPwsObjectWrapper<Product_V1> GetProductWithPrice(IPwsObjectWrapper<Customer_V1> customer, String productCode)
 		{
 			return RESTHandler<IPwsObjectWrapper<Product_V1>>.Invoke(() => customer.FollowList<Product_V1>(f => f.Products, "filter=ProductId Eq '" + productCode + "'").FirstOrDefault(), "Product");

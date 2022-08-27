@@ -53,7 +53,7 @@ namespace PwsClientRestExample.Demo
 			catch (Exception e) { Console.WriteLine(e.Message); }
 
 			// Add some door buffers
-			var lineBuffers = newOrder.AddBespokeLine("3203", 96);
+			var lineBuffers = newOrder.AddLine("3203", 96);
 
 			// If we try to alter the order multiple so it is invalid we shoudl get an exception and the change will not be persisted.
 			try
@@ -67,10 +67,14 @@ namespace PwsClientRestExample.Demo
 			//// Add a painted door, which is a dynamic product.  This will post back a question with a set of options.  We need to post back
 			// an answer, which may then return another question.  Once all questions are answered then the line will be finally created.
 			// For brevity here we will select the very last option from the list of options for each question.
-			var lineBespoke = newOrder.AddBespokeLine("BX716", 2);
-			while (lineBespoke.PwsObject.NextBespokeOption != null)
+			var bespokeProduct = Product.GetProductInfo(customer, "BX716");
+			if (bespokeProduct?.PwsObject.IsBespoke == true)
 			{
-				lineBespoke = newOrder.AddBespokeLine(lineBespoke.PwsObject, lineBespoke.PwsObject.NextBespokeOption.Options.Last());
+				var lineBespoke = newOrder.AddBespokeLine(bespokeProduct.PwsObject.ProductId, 2);
+				while (lineBespoke.PwsObject.NextBespokeOption != null)
+				{
+					lineBespoke = newOrder.AddBespokeLine(lineBespoke.PwsObject, lineBespoke.PwsObject.NextBespokeOption.Options.Last());
+				}
 			}
 
 			// Now take the regular door line we added before.  We would like to add some drilling to it.
@@ -130,8 +134,16 @@ namespace PwsClientRestExample.Demo
 			// Retrieve what delivery methods are available for this customer.
 			var deliveryMethods = resumedOrder.DispatchMethods();
 
+			// Now let's see if we can change this to an overnight service.
+			var overnightMethod = deliveryMethods.FirstOrDefault(f => f.PwsObject.Description.Contains("Overnight"));
+			if (overnightMethod != null)
+			{
+				resumedOrder.AssignDispatchMethod(overnightMethod.PwsObject.Type, DateTime.Today);
+				var current = resumedOrder.DispatchMethod();
+			}
+
 			// Now let's see if we can change this to a week commencing.
-			var weekMethod = deliveryMethods.Where(f => f.PwsObject.Description.Contains("week commencing")).FirstOrDefault();
+			var weekMethod = deliveryMethods.FirstOrDefault(f => f.PwsObject.Description.Contains("week commencing"));
 			if (weekMethod != null)
 			{
 				// Find earliest available week, commencing on Monday at 10am, where there are now blackouts.
@@ -144,7 +156,7 @@ namespace PwsClientRestExample.Demo
 			}
 
 			// Now let's see if we can change this to a collect
-			var collectMethod = deliveryMethods.Where(f => f.PwsObject.Description.StartsWith("Collect")).FirstOrDefault();
+			var collectMethod = deliveryMethods.FirstOrDefault(f => f.PwsObject.Description.StartsWith("Collect"));
 			if (collectMethod != null)
 			{
 				// Now lets take the first suggestion, which could be an exising booking or next available slot.
