@@ -64,16 +64,49 @@ namespace PwsClientRestExample.Demo
 			catch (RESTException re) { Console.WriteLine(re.Message); }
 			catch (Exception e) { Console.WriteLine(e.Message); }
 
-			//// Add a painted door, which is a dynamic product.  This will post back a question with a set of options.  We need to post back
+			// Add a painted door, which is a dynamic product.  This will post back a question with a set of options.  We need to post back
 			// an answer, which may then return another question.  Once all questions are answered then the line will be finally created.
 			// For brevity here we will select the very last option from the list of options for each question.
-			var bespokeProduct = Product.GetProductInfo(customer, "BX716");
-			if (bespokeProduct?.PwsObject.IsBespoke == true)
+			var dynamicPaintedProduct = Product.GetProductInfo(customer, "BX716");
+			if (dynamicPaintedProduct?.PwsObject.IsBespoke == true)
 			{
-				var lineBespoke = newOrder.AddBespokeLine(bespokeProduct.PwsObject.ProductId, 2);
+				var lineBespoke = newOrder.AddBespokeLine(dynamicPaintedProduct.PwsObject.ProductId, 2);
 				while (lineBespoke.PwsObject.NextBespokeOption != null)
 				{
 					lineBespoke = newOrder.AddBespokeLine(lineBespoke.PwsObject, lineBespoke.PwsObject.NextBespokeOption.Options.Last());
+				}
+			}
+
+			// Add a bespoke door, which is a dynamic product.  Similar to painted door above but more questions, including height and width,
+			// which require a quantity to be provided.  This should be between MinQuantity and MaxQuantity.  For purpose of this example the
+			// minimum quantity is always taken.
+			var dynamicBespokeProduct = Product.GetProductInfo(customer, "STABESPOKE");
+			if (dynamicBespokeProduct?.PwsObject.IsBespoke == true)
+			{
+				var lineBespoke = newOrder.AddBespokeLine(dynamicBespokeProduct.PwsObject.ProductId, 1);
+				while (lineBespoke.PwsObject.NextBespokeOption != null)
+				{
+					var nextBespokeOption = lineBespoke.PwsObject.NextBespokeOption;
+
+					// No default selection then select first available option
+					if (nextBespokeOption.Selection == null)
+					{
+						var selectedOption = nextBespokeOption.Options.Last();
+
+						// If this is a colour question then we may have access to an online colour swatch.
+						if (nextBespokeOption.TypeCode == "CLR" && selectedOption.Resources.Any())
+						{
+							var resource = selectedOption.Resources.First().Href;
+						}
+
+						lineBespoke = newOrder.AddBespokeLine(lineBespoke.PwsObject, selectedOption);
+					}
+
+					// If default selection then this must require a quantity to be set.  Assign the minimum quantity possible.
+					else
+					{
+						lineBespoke = newOrder.AddBespokeLine(lineBespoke.PwsObject, nextBespokeOption.Selection, nextBespokeOption.Selection.MinQuantity);
+					}
 				}
 			}
 
