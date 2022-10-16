@@ -176,16 +176,29 @@ namespace PwsClientRestExample.Demo
 			}
 
 			// Now let's see if we can change this to a week commencing.
-			var weekMethod = deliveryMethods.FirstOrDefault(f => f.PwsObject.Description.Contains("week commencing"));
-			if (weekMethod != null)
+			var weekCommencingMethod = deliveryMethods.FirstOrDefault(f => f.PwsObject.Description.Contains("week commencing"));
+			if (weekCommencingMethod != null)
 			{
 				// Find earliest available week, commencing on Monday at 10am, where there are now blackouts.
 				var selectedDate = DateTime.Today.AddHours(10);
 				while (selectedDate.DayOfWeek != DayOfWeek.Monday) selectedDate = selectedDate.AddDays(-1);
-				do { selectedDate = selectedDate.AddDays(7); } while (weekMethod.Blackouts(selectedDate, selectedDate).Any());
+				do { selectedDate = selectedDate.AddDays(7); } while (weekCommencingMethod.Blackouts(selectedDate, selectedDate).Any());
 				
 				// Set week commencing date
-				resumedOrder.AssignDispatchMethod(weekMethod.PwsObject.Type, selectedDate.Date);
+				resumedOrder.AssignDispatchMethod(weekCommencingMethod.PwsObject.Type, selectedDate.Date);
+			}
+
+			// Now let's see if we can change this to a week ending.
+			var weekEndingMethod = deliveryMethods.FirstOrDefault(f => f.PwsObject.Description.Contains("week ending"));
+			if (weekEndingMethod != null)
+			{
+				// Find earliest available week, ending on Friday at 4pm, where there are now blackouts.
+				var selectedDate = DateTime.Today.AddHours(16);
+				while (selectedDate.DayOfWeek != DayOfWeek.Friday) selectedDate = selectedDate.AddDays(-1);
+				do { selectedDate = selectedDate.AddDays(7); } while (weekEndingMethod.Blackouts(selectedDate, selectedDate).Any());
+
+				// Set week commencing date
+				resumedOrder.AssignDispatchMethod(weekEndingMethod.PwsObject.Type, selectedDate.Date);
 			}
 
 			// Now let's see if we can change this to a collect
