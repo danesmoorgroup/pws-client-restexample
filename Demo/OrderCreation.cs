@@ -1,4 +1,5 @@
-﻿using Pws.Clients.RestLibrary.Customers;
+﻿using Newtonsoft.Json;
+using Pws.Clients.RestLibrary.Customers;
 using Pws.Clients.RestLibrary.Service;
 using PwsClientRestExample.Model;
 using System;
@@ -84,9 +85,11 @@ namespace PwsClientRestExample.Demo
 			if (dynamicBespokeProduct?.PwsObject.IsBespoke == true)
 			{
 				var lineBespoke = newOrder.AddBespokeLine(dynamicBespokeProduct.PwsObject.ProductId, 1);
+				var lastResponse = lineBespoke.PwsObject;
 				while (lineBespoke.PwsObject.NextBespokeOption != null)
 				{
 					var nextBespokeOption = lineBespoke.PwsObject.NextBespokeOption;
+					lastResponse = lineBespoke.PwsObject;
 
 					// No default selection then select first available option
 					if (nextBespokeOption.Selection == null)
@@ -107,6 +110,15 @@ namespace PwsClientRestExample.Demo
 					{
 						lineBespoke = newOrder.AddBespokeLine(lineBespoke.PwsObject, nextBespokeOption.Selection, nextBespokeOption.Selection.MinQuantity);
 					}
+				}
+
+				// Demonstrate that we can serialise a bespoke line object at any point and then deserialise it later to pick up where we left off.
+				// In this case we're taking the last point from the previous line and using it to add a new line.
+				var serialisedObject = JsonConvert.SerializeObject(lastResponse);
+				var newLineBespoke = JsonConvert.DeserializeObject<Pws.Clients.RestLibrary.Customers.Orders.OrderLine_V2>(serialisedObject);
+				while (newLineBespoke.NextBespokeOption != null)
+				{
+					newLineBespoke = newOrder.AddBespokeLine(newLineBespoke, newLineBespoke.NextBespokeOption.Options.Last()).PwsObject;
 				}
 			}
 
