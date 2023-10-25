@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>PwsClientRestExample</RootNamespace>
     <AssemblyName>PwsClientRestExample</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
@@ -52,14 +52,14 @@
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Pws.Clients.RestLibrary, Version=1.0.18.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Pws.Clients.RestLibrary.Service.1.0.18\lib\net40\Pws.Clients.RestLibrary.dll</HintPath>
+    <Reference Include="Pws.Clients.RestLibrary, Version=1.0.28.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Pws.Clients.RestLibrary.Service.1.0.28\lib\net48\Pws.Clients.RestLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="Pws.Clients.RestLibrary.Service, Version=1.0.18.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Pws.Clients.RestLibrary.Service.1.0.18\lib\net40\Pws.Clients.RestLibrary.Service.dll</HintPath>
+    <Reference Include="Pws.Clients.RestLibrary.Service, Version=1.0.28.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Pws.Clients.RestLibrary.Service.1.0.28\lib\net48\Pws.Clients.RestLibrary.Service.dll</HintPath>
     </Reference>
-    <Reference Include="Pws.Clients.RestLibrary.Transport, Version=1.0.18.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Pws.Clients.RestLibrary.Service.1.0.18\lib\net40\Pws.Clients.RestLibrary.Transport.dll</HintPath>
+    <Reference Include="Pws.Clients.RestLibrary.Transport, Version=1.0.28.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Pws.Clients.RestLibrary.Service.1.0.28\lib\net48\Pws.Clients.RestLibrary.Transport.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
